@@ -1,0 +1,1 @@
+Tested on windows 11 22H2 (OS BUild 22621.4317) with memory integrity turned off.
