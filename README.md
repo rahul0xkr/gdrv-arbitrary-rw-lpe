@@ -7,7 +7,11 @@ This project demonstrates a Windows kernel privilege escalation (LPE) exploit us
 The exploit achieves **SYSTEM privileges** by leveraging an arbitrary read/write primitive exposed by the driver and performing token stealing.
 
 ---
+## Operating System Used
 
+Tested on windows 11 22H2 (OS BUild 22621.4317) with memory integrity turned off.
+
+---
 ##  Vulnerability
 
 The driver exposes an IOCTL that allows arbitrary memory copy operations:
