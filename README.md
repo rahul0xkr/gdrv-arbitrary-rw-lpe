@@ -1,6 +1,6 @@
 # Windows Kernel LPE via Vulnerable Driver (gdrv.sys)
 
-## 📌 Overview
+##  Overview
 
 This project demonstrates a Windows kernel privilege escalation (LPE) exploit using a vulnerable OEM driver (`gdrv.sys`).
 
@@ -8,7 +8,7 @@ The exploit achieves **SYSTEM privileges** by leveraging an arbitrary read/write
 
 ---
 
-## ⚙️ Vulnerability
+##  Vulnerability
 
 The driver exposes an IOCTL that allows arbitrary memory copy operations:
 
@@ -19,7 +19,7 @@ This is a classic example of a **BYOVD (Bring Your Own Vulnerable Driver)** scen
 
 ---
 
-## 🔥 Exploit Strategy
+##  Exploit Strategy
 
 1. Obtain arbitrary read/write primitive via IOCTL
 2. Resolve `PsInitialSystemProcess` dynamically
@@ -34,7 +34,7 @@ This is a classic example of a **BYOVD (Bring Your Own Vulnerable Driver)** scen
 
 ---
 
-## 💣 Result
+##  Result
 
 ```text
 C:\> whoami
