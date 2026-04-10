@@ -53,9 +53,12 @@ This results in arbitrary read/write primitive.
 ##  Demo
 
 Token stolen!
+
 whoami
+
 nt authority\system
 
 ## Build & Run
 g++ exploit.cpp -o exploit.exe -lpsapi
+
 exploit.exe
