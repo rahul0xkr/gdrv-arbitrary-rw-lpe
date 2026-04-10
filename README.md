@@ -27,26 +27,31 @@ No validation is performed → leads to arbitrary memory access in kernel.
 
 ## 🔬 Root Cause
 
-```c
+```
 v8 = *(_BYTE *)(v6 + v3++);
 *(_BYTE *)(v3 - 1) = v8;
+
 v3 → destination pointer (user-controlled)
 v5 → source pointer (user-controlled)
 v4 → size (user-controlled)
-
+```
 This results in arbitrary read/write primitive.
 
-⚙️ Exploitation Steps
-Open device \\.\GIO
-Build arbitrary read/write primitive
-Leak kernel base via EnumDeviceDrivers
-Resolve PsInitialSystemProcess
-Read SYSTEM EPROCESS
-Traverse ActiveProcessLinks
-Locate current process
-Steal SYSTEM token
-Spawn SYSTEM shell
+
+
+## ⚙️ Exploitation Steps
+1) Open device \\.\GIO
+2) Build arbitrary read/write primitive
+3) Leak kernel base via EnumDeviceDrivers
+4) Resolve PsInitialSystemProcess
+5) Read SYSTEM EPROCESS
+6) Traverse ActiveProcessLinks
+7) Locate current process
+8) Steal SYSTEM token
+9) Spawn SYSTEM shell
+    
 🧪 Demo
+
 [+] Token stolen!
 whoami
 nt authority\system
