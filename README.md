@@ -8,7 +8,7 @@ By exploiting this vulnerability, we achieve arbitrary kernel read/write and esc
 
 ---
 
-## ⚠️ Vulnerability Summary
+##  Vulnerability Summary
 
 IOCTL: `0xC3502808`
 
@@ -25,7 +25,7 @@ No validation is performed → leads to arbitrary memory access in kernel.
 
 ---
 
-## 🔬 Root Cause
+##  Root Cause
 
 ```
 v8 = *(_BYTE *)(v6 + v3++);
@@ -39,7 +39,7 @@ This results in arbitrary read/write primitive.
 
 
 
-## ⚙️ Exploitation Steps
+##  Exploitation Steps
 1) Open device \\.\GIO
 2) Build arbitrary read/write primitive
 3) Leak kernel base via EnumDeviceDrivers
@@ -50,11 +50,12 @@ This results in arbitrary read/write primitive.
 8) Steal SYSTEM token
 9) Spawn SYSTEM shell
     
-🧪 Demo
+##  Demo
 
-[+] Token stolen!
+Token stolen!
 whoami
 nt authority\system
-🛠️ Build & Run
+
+## Build & Run
 g++ exploit.cpp -o exploit.exe -lpsapi
 exploit.exe
