@@ -1,45 +1,55 @@
-# Windows Kernel LPE via Vulnerable Driver (gdrv.sys)
+# Windows Kernel LPE via GDRV.sys (Arbitrary Read/Write → Token Stealing)
 
 ##  Overview
 
-This project demonstrates a Windows kernel privilege escalation (LPE) exploit using a vulnerable OEM driver (`gdrv.sys`).
+This project demonstrates a Local Privilege Escalation (LPE) vulnerability in the GDRV.sys driver. The driver exposes an IOCTL that performs a memory copy operation without validating user-supplied pointers.
 
-The exploit achieves **SYSTEM privileges** by leveraging an arbitrary read/write primitive exposed by the driver and performing token stealing.
-
----
-## Operating System Used
-
-Tested on windows 11 22H2 (OS BUild 22621.4317) with memory integrity turned off.
-
----
-##  Vulnerability
-
-The driver exposes an IOCTL that allows arbitrary memory copy operations:
-
-- No validation of source/destination pointers
-- Leads to **arbitrary kernel read/write**
-
-This is a classic example of a **BYOVD (Bring Your Own Vulnerable Driver)** scenario.
+By exploiting this vulnerability, we achieve arbitrary kernel read/write and escalate privileges by stealing the SYSTEM process token.
 
 ---
 
-##  Exploit Strategy
+## ⚠️ Vulnerability Summary
 
-1. Obtain arbitrary read/write primitive via IOCTL
-2. Resolve `PsInitialSystemProcess` dynamically
-3. Leak SYSTEM `_EPROCESS`
-4. Dynamically discover structure offsets:
-   - Locate `UniqueProcessId` via SYSTEM PID (4)
-   - Infer `ActiveProcessLinks`
-   - Identify `Token` via pointer heuristics
-5. Traverse process list to find current process
-6. Replace current process token with SYSTEM token
-7. Spawn SYSTEM shell
+IOCTL: `0xC3502808`
+
+The driver performs:
+
+memcpy(dst, src, size)
+
+Where:
+- `dst` = user-controlled
+- `src` = user-controlled
+- `size` = user-controlled
+
+No validation is performed → leads to arbitrary memory access in kernel.
 
 ---
 
-##  Result
+## 🔬 Root Cause
 
-```text
-C:\> whoami
+```c
+v8 = *(_BYTE *)(v6 + v3++);
+*(_BYTE *)(v3 - 1) = v8;
+v3 → destination pointer (user-controlled)
+v5 → source pointer (user-controlled)
+v4 → size (user-controlled)
+
+This results in arbitrary read/write primitive.
+
+⚙️ Exploitation Steps
+Open device \\.\GIO
+Build arbitrary read/write primitive
+Leak kernel base via EnumDeviceDrivers
+Resolve PsInitialSystemProcess
+Read SYSTEM EPROCESS
+Traverse ActiveProcessLinks
+Locate current process
+Steal SYSTEM token
+Spawn SYSTEM shell
+🧪 Demo
+[+] Token stolen!
+whoami
 nt authority\system
+🛠️ Build & Run
+g++ exploit.cpp -o exploit.exe -lpsapi
+exploit.exe
