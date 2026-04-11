@@ -1,1 +1,1 @@
-Tested on windows 11 22H2 (OS BUild 22621.4317) with memory integrity turned off.
+Tested on Windows 11 22H2 (OS BUild 22621.4317) and Windows 11 22H2 (OS Build 22621.1702) with memory integrity turned off.
